@@ -1,0 +1,265 @@
+CREATE TABLE ator (
+	nome		 VARCHAR(512),
+	data_nascimento	 VARCHAR(512),
+	local_de_nascimento VARCHAR(512),
+	genero		 VARCHAR(512),
+	nacionalidade	 VARCHAR(512),
+	PRIMARY KEY(nome)
+);
+
+CREATE TABLE realizador (
+	nome		 VARCHAR(512),
+	data_de_nascimento	 VARCHAR(512),
+	local_de_nascimento VARCHAR(512),
+	genero		 VARCHAR(512),
+	nacionalidade	 VARCHAR(512),
+	PRIMARY KEY(nome)
+);
+
+CREATE TABLE produto (
+	numero_do_produto		 NUMERIC(8,2),
+	nome_do_produto		 VARCHAR(512),
+	produtor			 VARCHAR(512),
+	detalhes			 VARCHAR(512),
+	tipo				 VARCHAR(512),
+	preco				 NUMERIC(8,2),
+	validade			 FLOAT(8),
+	idade_recomendada		 NUMERIC(8,2),
+	administrador_utilizador_email VARCHAR(512) NOT NULL,
+	PRIMARY KEY(numero_do_produto)
+);
+
+CREATE TABLE administrador (
+	estatisticas	 VARCHAR(512),
+	utilizador_email VARCHAR(512),
+	PRIMARY KEY(utilizador_email)
+);
+
+CREATE TABLE cliente (
+	saldo		 NUMERIC(8,2),
+	id_de_utilizador NUMERIC(8,2),
+	artigos_alugados NUMERIC(8,2),
+	utilizador_email VARCHAR(512),
+	PRIMARY KEY(utilizador_email)
+);
+
+CREATE TABLE utilizador (
+	email	 VARCHAR(512),
+	password VARCHAR(512),
+	nome	 VARCHAR(512),
+	idade	 INTEGER,
+	PRIMARY KEY(email)
+);
+
+CREATE TABLE historico (
+	preco_antigo		 FLOAT(8),
+	data			 TIMESTAMP,
+	produto_numero_do_produto NUMERIC(8,2) NOT NULL
+);
+
+CREATE TABLE mensagem (
+	id				 INTEGER,
+	titulo			 VARCHAR(512),
+	mensagem			 VARCHAR(512),
+	data_envio			 TIMESTAMP,
+	administrador_utilizador_email VARCHAR(512) NOT NULL,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE aluguer (
+	data_final		 TIMESTAMP,
+	preco			 NUMERIC(8,2),
+	data_registo		 TIMESTAMP,
+	cliente_utilizador_email	 VARCHAR(512) NOT NULL,
+	produto_numero_do_produto NUMERIC(8,2) NOT NULL
+);
+
+CREATE TABLE read_check (
+	lida			 BOOL,
+	mensagem_id		 INTEGER NOT NULL,
+	cliente_utilizador_email VARCHAR(512) NOT NULL
+);
+
+CREATE TABLE produto_realizador (
+	produto_numero_do_produto NUMERIC(8,2),
+	realizador_nome		 VARCHAR(512),
+	PRIMARY KEY(produto_numero_do_produto,realizador_nome)
+);
+
+CREATE TABLE ator_produto (
+	ator_nome		 VARCHAR(512),
+	produto_numero_do_produto NUMERIC(8,2),
+	PRIMARY KEY(ator_nome,produto_numero_do_produto)
+);
+
+ALTER TABLE produto ADD CONSTRAINT produto_fk1 FOREIGN KEY (administrador_utilizador_email) REFERENCES administrador(utilizador_email);
+ALTER TABLE administrador ADD CONSTRAINT administrador_fk1 FOREIGN KEY (utilizador_email) REFERENCES utilizador(email);
+ALTER TABLE cliente ADD CONSTRAINT cliente_fk1 FOREIGN KEY (utilizador_email) REFERENCES utilizador(email);
+ALTER TABLE historico ADD CONSTRAINT historico_fk1 FOREIGN KEY (produto_numero_do_produto) REFERENCES produto(numero_do_produto);
+ALTER TABLE mensagem ADD CONSTRAINT mensagem_fk1 FOREIGN KEY (administrador_utilizador_email) REFERENCES administrador(utilizador_email);
+ALTER TABLE aluguer ADD CONSTRAINT aluguer_fk1 FOREIGN KEY (cliente_utilizador_email) REFERENCES cliente(utilizador_email);
+ALTER TABLE aluguer ADD CONSTRAINT aluguer_fk2 FOREIGN KEY (produto_numero_do_produto) REFERENCES produto(numero_do_produto);
+ALTER TABLE read_check ADD CONSTRAINT read_check_fk1 FOREIGN KEY (mensagem_id) REFERENCES mensagem(id);
+ALTER TABLE read_check ADD CONSTRAINT read_check_fk2 FOREIGN KEY (cliente_utilizador_email) REFERENCES cliente(utilizador_email);
+ALTER TABLE produto_realizador ADD CONSTRAINT produto_realizador_fk1 FOREIGN KEY (produto_numero_do_produto) REFERENCES produto(numero_do_produto);
+ALTER TABLE produto_realizador ADD CONSTRAINT produto_realizador_fk2 FOREIGN KEY (realizador_nome) REFERENCES realizador(nome);
+ALTER TABLE ator_produto ADD CONSTRAINT ator_produto_fk1 FOREIGN KEY (ator_nome) REFERENCES ator(nome);
+ALTER TABLE ator_produto ADD CONSTRAINT ator_produto_fk2 FOREIGN KEY (produto_numero_do_produto) REFERENCES produto(numero_do_produto);
+
+
+
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Chadwick Boseman', '29-11-1977', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Michael B. Jordan', '09-02-1987', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Lupita Nyongo', '01-03-1983', 'Mexico', 'Feminine', 'Mexican');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Danai Gurira', '14-02-1978', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Martin Freeman', '08-09-1971', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Daniel Kaluuya', '08-05-1989', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Robert Downey Jr.', '04-04-1965', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Chris Evans', '13-06-1981', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Mark Ruffalo', '22-11-1967', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Chris Hemsworth', '11-08-1983', 'Australia', 'Male', 'Australian');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Scarlett Johansson', '22-11-1984', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Jeremy Renner', '07-06-1971', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Saoirse Ronan', '12-04-1994', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Laurie Metcalf', '16-06-1955', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Timothee Chalamet', '27-12-1995', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Lucas Hedges', '12-12-1996', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Tracy Letts', '04-06-1965', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Odeya Rush', '12-03-1997', 'Israel', 'Feminine', 'Arabic');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Judy Garland', '10-06-1922', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Frank Morgan', '01-06-1890', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Ray Bolger', '10-06-1904', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Bert Lahr', '13-08-1895', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Billie Burke', '07-08-1884', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Margaret Hamilton', '09-12-1902', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Humphrey Bogart', '25-12-1899', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Ingrid Bergman', '29-08-1915', 'Sweden', 'Feminine', 'Swedish');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Paul Von Hernried', '10-01-1908', 'Hungary', 'Male', 'Hungarian');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Claude Rains', '10-10-1889', 'UK', 'Male', 'English
+');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Conrad Veidt', '22-01-1893', 'Germany', 'Male', 'German');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Peter Lorre', '24-06-1904', 'Hungary', 'Male', 'Hungarian
+
+');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Winona Ryder', '29-10-1971', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('David Harbour', '10-04-1975', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Finn Wolfhard', '23-12-2002', 'Canada', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Natalia Dyer', '13-06-1995', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Cara Buono', '01-03-1974', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Charlie Heaton', '06-02-1994', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Anya Taylor Joy', '16-04-1996', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Marielle Heller', '01-10-1979', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Thomas Sangster', '16-05-1990', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Scott Frank', '10-03-1960', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Harry Melling', '10-03-1989', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Bill Camp', '13-10-1961', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Josh Radnor', '29-07-1974', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Jason Segel', '18-01-1980', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Cobie Smulders', '03-04-1982', 'Canada', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Neil Patrick Harris', '15-06-1973', 'USA', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Alyson Hannigan', '24-03-1974', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Cristin Milioti', '16-08-1985', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Cillian Murphy', '25-05-1976', 'Ireland', 'Male', 'Irish');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Helen McCrory', '17-08-1968', 'UK', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Paul Anderson', '12-02-1978', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Sophie Rundle', '21-04-1988', 'UK', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Finn Cole', '09-11-1995', 'UK', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Aidan Gillen', '24-04-1968', 'Ireland', 'Male', 'Irish');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Eliza Taylor Cotter', '24-10-1989', 'Australia', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Paige Turco', '17-05-1965', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Bob Morley', '20-12-1984', 'Australia', 'Male', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Marie Avgeropoulos', '17-06-1986', 'Canada', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Lindsey Morgan', '17-02-1990', 'USA', 'Feminine', 'English');
+INSERT INTO public.ator (nome, data_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Richard Harmon', '18-08-1991', 'Canada', 'Male', 'English');
+
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (1.00, 'Black Panther', 'Kevin Feige', 'After the death of his father, TChalla returns home to the African nation of Wakanda to take his rightful place as king. When a powerful enemy suddenly reappears, TChallas mettle as king -- and as Black Panther -- gets tested when he is drawn into a conflict that puts the fate of Wakanda and the entire world at risk. Faced with treachery and danger, the young king must rally his allies and release the full power of Black Panther to defeat his foes and secure the safety of his people', 'Filme', 5.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (2.00, 'Avengers: Endgame', 'Kevin Feige', 'Adrift in space with no food or water, Tony Stark sends a message to Pepper Potts as his oxygen supply starts to dwindle. Meanwhile, the remaining Avengers -- Thor, Black Widow, Captain America and Bruce Banner -- must figure out a way to bring back their vanquished allies for an epic showdown with Thanos -- the evil demigod who decimated the planet and the universe.', 'Filme', 5.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (3.00, 'Lady Bird', 'Scott Rudin', 'A teenager (Saoirse Ronan) navigates a loving but turbulent relationship with her strong-willed mother (Laurie Metcalf) over the course of an eventful and poignant senior year of high school.', 'Filme', 5.00, '10', 18.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (4.00, 'The Wizard of Oz', 'Victor Fleming', 'When a tornado rips through Kansas, Dorothy (Judy Garland) and her dog, Toto, are whisked away in their house to the magical land of Oz. They follow the Yellow Brick Road toward the Emerald City to meet the Wizard, and en route they meet a Scarecrow (Ray Bolger) that needs a brain, a Tin Man (Jack Haley) missing a heart, and a Cowardly Lion (Bert Lahr) who wants courage. The wizard asks the group to bring him the broom of the Wicked Witch of the West (Margaret Hamilton) to earn his help.', 'Filme', 5.00, '10', 14.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (5.00, 'Casablanca', 'Hal B. Wallis', 'Rick Blaine (Humphrey Bogart), who owns a nightclub in Casablanca, discovers his old flame Ilsa (Ingrid Bergman) is in town with her husband, Victor Laszlo (Paul Henreid). Laszlo is a famed rebel, and with Germans on his tail, Ilsa knows Rick can help them get out of the country.', 'Filme', 5.00, '10', 14.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (6.00, 'Stranger Things', 'Matt Duffer', 'A love letter to the 80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl.', 'Serie', 8.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (7.00, 'The Queens Gambit', 'William Horberg', 'Abandoned and entrusted to a Kentucky orphanage in the late 1950s, a young Beth Harmon (Anya Taylor-Joy) discovers an astonishing talent for chess while developing an addiction to tranquilizers provided by the state as a sedative for the children. Haunted by her personal demons and fueled by a cocktail of narcotics and obsession, Beth transforms into an impressively skilled and glamorous outcast while determined to conquer the traditional boundaries established in the male world of competitive chess.', 'Serie', 8.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (8.00, 'How I Met Your Mother', 'Greg Malins', 'A man named Ted tells his kids how he met the love of his life, through flashbacks, years in the future. The bored kids sit on the sofa and listen as dad regales them with tales of his pursuit of romance.', 'Serie', 8.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (9.00, 'Peaky Blinders', 'Jamie Glazebrook', 'A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.', 'Serie', 8.00, '10', 13.00, 'admin@admin.pt');
+INSERT INTO public.produto (numero_do_produto, nome_do_produto, produtor, detalhes, tipo, preco, validade, idade_recomendada, administrador_utilizador_email) VALUES (10.00, 'The 100', 'Gina Girolamo', 'Juvenile prisoners from a space-station society are exiled to Earth decades after the planet was destroyed by nuclear war.', 'Serie', 8.00, '10', 13.00, 'admin@admin.pt');
+
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Ryan Coogler', '23-05-1986', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Anthony Russo', '03-02-1970', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Greta Gerwig', '04-08-1983', 'USA', 'Feminine', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Victor Fleming', '23-02-1889', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Michael Curtiz', '24-12-1888', 'Hungary', 'Male', 'Hungarian');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Ross Duffer', '15-02-1984', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Scott Frank', '10-03-1960', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Carter Bays', '12-08-1975', 'USA', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Steven Knight', '14-06-1959', 'UK', 'Male', 'English');
+INSERT INTO public.realizador (nome, data_de_nascimento, local_de_nascimento, genero, nacionalidade) VALUES ('Bharat Nalluri', '11-01-1965', 'India', 'Male', 'Indian');
+
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Chadwick Boseman', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Michael B. Jordan', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Lupita Nyongo', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Danai Gurira', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Martin Freeman', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Daniel Kaluuya', 1.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Robert Downey Jr.', 2.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Mark Ruffalo', 2.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Chris Hemsworth', 2.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Scarlett Johansson', 2.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Jeremy Renner', 2.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Laurie Metcalf', 3.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Timothee Chalamet', 3.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Lucas Hedges', 3.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Tracy Letts', 3.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Odeya Rush', 3.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Judy Garland', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Frank Morgan', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Ray Bolger', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Bert Lahr', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Billie Burke', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Margaret Hamilton', 4.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Humphrey Bogart', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Ingrid Bergman', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Paul Von Hernried', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Claude Rains', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Conrad Veidt', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Peter Lorre', 5.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Winona Ryder', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('David Harbour', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Finn Wolfhard', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Natalia Dyer', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Cara Buono', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Charlie Heaton', 6.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Anya Taylor Joy', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Marielle Heller', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Thomas Sangster', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Scott Frank', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Harry Melling', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Bill Camp', 7.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Josh Radnor', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Jason Segel', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Cobie Smulders', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Neil Patrick Harris', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Alyson Hannigan', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Cristin Milioti', 8.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Cillian Murphy', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Helen McCrory', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Paul Anderson', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Sophie Rundle', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Finn Cole', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Aidan Gillen', 9.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Eliza Taylor Cotter', 10.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Paige Turco', 10.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Bob Morley', 10.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Marie Avgeropoulos', 10.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Lindsey Morgan', 10.00);
+INSERT INTO public.ator_produto (ator_nome, produto_numero_do_produto) VALUES ('Richard Harmon', 10.00);
+
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (1.00, 'Ryan Coogler');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (2.00, 'Anthony Russo');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (3.00, 'Greta Gerwig');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (4.00, 'Victor Fleming');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (5.00, 'Michael Curtiz');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (6.00, 'Ross Duffer');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (7.00, 'Scott Frank');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (8.00, 'Carter Bays');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (9.00, 'Steven Knight');
+INSERT INTO public.produto_realizador (produto_numero_do_produto, realizador_nome) VALUES (10.00, 'Bharat Nalluri');
