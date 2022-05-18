@@ -38,6 +38,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"user",
 						""
 					]
@@ -67,6 +68,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						""
 					]
@@ -96,6 +98,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						""
 					]
@@ -125,6 +128,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						""
 					]
@@ -154,6 +158,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"rating",
 						""
 					]
@@ -183,6 +188,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						""
 					]
@@ -212,6 +218,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"campaign",
 						""
 					]
@@ -241,6 +248,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						"filtros"
 					]
@@ -270,6 +278,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"report",
 						"campaign"
 					]
@@ -299,6 +308,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"report",
 						"year"
 					]
@@ -328,6 +338,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"dbproj",
 						"product",
 						"compare"
 					]
