@@ -536,7 +536,7 @@ def criar_capanha():
     return flask.jsonify(response)
 
 
-@app.route('/dbproj/filtros', methods=['GET'])
+@app.route('/dbproj/filtros/', methods=['GET'])
 def filtros():
     payload = flask.request.get_json()
 
@@ -551,34 +551,20 @@ def filtros():
         return flask.jsonify(response)
     else:
         try:
-            if 'Tipo' in payload:
-                Tipo = payload['Tipo']
+            if 'tipo' in payload:
+                tipo = payload['tipo']
 
-                if Tipo == "Computador":
-                    statement = 'SELECT * from Produtos, Computador WHERE Tipo = %s AND Produtos.IDProduto = Computador.ID;'
-                if Tipo == "Televisao":
-                    statement = 'SELECT * from Produtos, Televisao WHERE Tipo = %s AND Produtos.IDProduto = Televisao.ID;'
-                if Tipo == "SmartPhone":
-                    statement = 'SELECT * from Produtos, SmartPhone WHERE Tipo = %s AND Produtos.IDProduto = SmartPhone.ID;'
+                statement = 'SELECT * from Produtos WHERE tipo = %s;'
 
-                values = (Tipo)
+                values = (tipo)
                 cur.execute(statement, values)
                 rows = cur.fetchall()
                 conn.commit()
                 response = {'status': StatusCodes['success'], 'results': rows}
-            if 'SubTipo' in payload:
-                SubTipo = payload['SubTipo']
-
-                if SubTipo == "Laptop":
-                    statement = 'SELECT * from Produtos, Laptop WHERE SubTipo = %s AND Produtos.IDProduto = Laptop.ID;'
-                if SubTipo == "Fixo":
-                    statement = 'SELECT * from Produtos, Fixo WHERE SubTipo = %s AND Produtos.IDProduto = Fixo.ID;'
-
-                values = (SubTipo)
-                cur.execute(statement, values)
-                rows = cur.fetchall()
-                conn.commit()
-                response = {'status': StatusCodes['success'], 'results': rows}
+            
+            else :
+                response = {'status': StatusCodes['api_error'], 'results': 'Payload incorreto INICIAL'}
+                return flask.jsonify(response)
 
         except (Exception, psycopg2.DatabaseError) as error:
             logger.error(f'GET /dbproj/product/filters - error: {error}')
@@ -592,8 +578,7 @@ def filtros():
 
     return flask.jsonify(response)
 
-
-@app.route('/dbproj/report/campaign', methods=['GET'])
+@app.route('/dbproj/report/campaign/', methods=['GET'])
 def estatisticas_campanha():
     payload = flask.request.get_json()
 
@@ -601,38 +586,32 @@ def estatisticas_campanha():
     cur = conn.cursor()
 
     logger.debug(f'GET /dbproj/report/campaign - payload: {payload}')
-    tabela = cur.execute('SELECT * FROM Campanha;')
     rows = cur.fetchall()
-    cur.execute('SELECT Premissoes FROM Utilizador WHERE ID = %i;', listaToken[len(listaToken) - 1])
+    cur.execute('SELECT Premissoes FROM Utilizador WHERE ID = %i;', (listaToken, ))
     row3 = cur.fetchall()
-    if row3 != 'Admnistrador':
+    if row3[0][0] != 'Admnistrador':
         response = {'status': StatusCodes['api_error'], 'results': 'Sem premissoes'}
         return flask.jsonify(response)
     else:
-        for i in rows:
-            if len(i) < 1:
-                response = {'status': StatusCodes['api_error'], 'results': 'Produto não encontrado'}
-            else:
-                response = {'status': StatusCodes['success'], 'results': rows}
-    try:
-        # commit the transaction
-        conn.commit()
-        response = {'status': StatusCodes['success'], 'results': f'UTILIZADOR INSERIDO {payload["nomeutilizador"]}'}
-        global numeroIndice
-        listaToken.append([numeroIndice, payload['nomeutilizador']])
-        numeroIndice += 1
+        try:
+            statement = 'SELECT id, descricao, numcupoes, cupoesusados FROM capanha;'
+            cur.execute(statement)
+            rows = cur.fetchall()
+            response = {'status': StatusCodes['success'], 'results': rows}
+            conn.commit()
 
+        except (Exception, psycopg2.DatabaseError) as error:
+            logger.error(f'GET /dbproj/report/campaigns/ - error: {error}')
+            response = {'status': StatusCodes['internal_error'], 'errors': str(error)}
+            # an error occurred, rollback
+            conn.rollback()
 
-    except (Exception, psycopg2.DatabaseError) as error:
-        logger.error(f'GET /dbproj/report/campaign - error: {error}')
-        response = {'status': StatusCodes['internal_error'], 'errors': str(error)}
-        conn.rollback()
-
-    finally:
-        if conn is not None:
-            conn.close()
+        finally:
+            if conn is not None:
+                conn.close()
 
     return flask.jsonify(response)
+
 
 
 @app.route('/proj/report/year',methods=['GET'])        
